@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Snake Game</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="SnakeGame.js" defer></script>
+</head>
+<body>
+  <div id="main"></div>
+  <div id="scoreBoard">
+    Score: <span id="score">0</span>
+  </div>
+  <div id="gameOver">
+    <div>Game Over</div>
+    <div>Score: <span id="score2"></span></div>
+    <button>Close</button>
+  </div>
+  <div id="home">
+    <h1>The Snake Game</h1>
+    <hr>
+    Developed by: <i>Sandipan Chowdhury</i> &nbsp;
+    <span style="background-color: lightblue;">@github/bin-san</span>
+    <hr><br>
+    <center>
+      <input type="text" name="name" id="playerName" placeholder="Your name?">
+      <button id="startGame">let's play</button>
+    </center>
+    <h2>Rules</h2>
+    <ul>
+      <li>
+        Click ArrowLeft, ArrowRight, ArrowUp, ArrowDown on the keyboard to change direction of the snake
+      </li>
+      <li>
+        Click Spacebar to pause/resume. 
+      </li>
+    </ul>
+    <br>
+  </div>
+</body>
+</html>
