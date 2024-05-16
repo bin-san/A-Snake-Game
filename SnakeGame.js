@@ -175,7 +175,7 @@ class SnakeGame {
     }
   }
   speed(){
-    return 350 - this.snakeSize * 2
+    return 400
   }
   moveSnake(x, y) {
     if (this.foodLoc[0] == x && this.foodLoc[1] == y) {
