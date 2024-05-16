@@ -11,14 +11,10 @@ class TouchDirection {
     }
     return x
   }
-  interpretTouchStart(event) {
-    this.lastPos = [event.touches[0].clientX, event.touches[0].clientY]
-  }
-  interpretTouchEnd(event) {
+  interpret(event){
     event.preventDefault() 
     if (this.lastPos.length === 0) {
-      // this.lastPos = [event.touches[0].clientX, event.touches[0].clientY]
-      return 
+      this.lastPos = [event.touches[0].clientX, event.touches[0].clientY]
     }
     else {
       let pos = [event.touches[0].clientX, event.touches[0].clientY]

@@ -91,8 +91,7 @@ class SnakeGame {
           break;
       }
     }
-    window.ontouchstart = this.touchDirection.interpretTouchStart
-    window.ontouchEnd = this.snakeMoveOnTouchMove
+    window.ontouchmove = this.snakeMoveOnTouchMove
     // Food
     this.foodLoc = null
     this.food.style.position = 'absolute'
@@ -315,7 +314,7 @@ class SnakeGame {
   }
   snakeMoveOnTouchMove(event) {
     let lastDirection = window.snakeGame.touchDirection.direction
-    window.snakeGame.touchDirection.interpretTouchEnd(event)
+    window.snakeGame.touchDirection.interpret(event)
     if (lastDirection === window.snakeGame.touchDirection.direction) {
       return
     }
