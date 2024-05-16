@@ -33,10 +33,10 @@ class SnakeGame {
   soundMode = true
 
   // mouse handle
-  mouseDirection = new MouseDirection(Math.floor(this.dimension / 100))
+  mouseDirection = new MouseDirection(Math.floor(this.dimension / 10))
 
   // touch handle
-  touchDirection = new TouchDirection(Math.floor(this.dimension / 100))
+  touchDirection = new TouchDirection(Math.floor(this.dimension / 10))
 
   constructor() {
     main.style.width = `${this.numOfPixelsInWidth * this.snakePixelSize}px`
