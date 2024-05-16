@@ -1,3 +1,6 @@
+import { MouseDirection } from "./MouseDirection.js"
+import { TouchDirection } from "./TouchDirection.js"
+
 class SnakeGame {
   snake = []
   snakeLocation = []
@@ -18,6 +21,22 @@ class SnakeGame {
   // auto moving
   autoMover = null
   autoMoverId = null
+  saveAutoMover = null
+
+  // sounds
+  snakeEatsFoodSound = document.getElementById('snakeEatsFoodSound')
+  gameOverSound = document.getElementById('gameOverSound')
+  bgmSound = document.getElementById('bgmSound')
+
+  // modes
+  mouseMode = false 
+  soundMode = true
+
+  // mouse handle
+  mouseDirection = new MouseDirection()
+
+  // touch handle
+  touchDirection = new TouchDirection()
 
   constructor() {
     main.style.width = `${this.numOfPixelsInWidth * this.snakePixelSize}px`
@@ -39,45 +58,40 @@ class SnakeGame {
       console.log(event.key)
       switch (event.key) {
         case 'ArrowUp':
-          if (this.autoMover == this.moveDown) {
-            break;
-          }
-          clearTimeout(this.autoMoverId)
-          this.autoMover = this.moveUp
-          this.moveUp()
+          this.upEventHandle()
           break;
         
         case 'ArrowDown':
-          if (this.autoMover == this.moveUp) {
-            break;
-          }
-          clearTimeout(this.autoMoverId)
-          this.autoMover = this.moveDown
-          this.moveDown()
+          this.downEventHandle()
           break
         
         case 'ArrowLeft':
-          if (this.autoMover == this.moveRight) {
-            break;
-          }
-          clearTimeout(this.autoMoverId)
-          this.autoMover = this.moveLeft
-          this.moveLeft()
+          this.leftEventHandle()
           break
         
         case 'ArrowRight':
-          if (this.autoMover == this.moveLeft) {
-            break;
-          }
-          clearTimeout(this.autoMoverId)
-          this.autoMover = this.moveRight
-          this.moveRight()
+          this.rightEventHandle()
           break
+
+        case ' ':
+          try {
+            // pause
+            if (this.autoMover) {
+              this.pauseGame()
+            }
+            else {
+              this.resumeGame()
+            }
+          }
+          catch (err) {
+            console.log(err)
+          }
       
         default:
           break;
       }
     }
+    window.ontouchmove = this.snakeMoveOnTouchMove
     // Food
     this.foodLoc = null
     this.food.style.position = 'absolute'
@@ -95,6 +109,45 @@ class SnakeGame {
     //   this.autoMover()
     // }, 350)
     this.moveRight()
+
+    // sound
+    if (this.soundMode) {
+      this.bgmSound.play()
+    }
+  }
+
+  // event handle: for snake move
+  upEventHandle(){
+    if (this.autoMover == this.moveDown) {
+      return 
+    }
+    clearTimeout(this.autoMoverId)
+    this.autoMover = this.moveUp
+    this.moveUp()
+  }
+  downEventHandle(){
+    if (this.autoMover == this.moveUp) {
+      return 
+    }
+    clearTimeout(this.autoMoverId)
+    this.autoMover = this.moveDown
+    this.moveDown()
+  }
+  rightEventHandle(){
+    if (this.autoMover == this.moveLeft) {
+      return
+    }
+    clearTimeout(this.autoMoverId)
+    this.autoMover = this.moveRight
+    this.moveRight()
+  }
+  leftEventHandle(){
+    if (this.autoMover == this.moveRight) {
+      return
+    }
+    clearTimeout(this.autoMoverId)
+    this.autoMover = this.moveLeft
+    this.moveLeft()
   }
   createSnakeMetamer(){
     let snakeElement = document.createElement('div')
@@ -125,6 +178,9 @@ class SnakeGame {
   moveSnake(x, y) {
     if (this.foodLoc[0] == x && this.foodLoc[1] == y) {
       // meet the food
+      if (this.soundMode) {
+        this.snakeEatsFoodSound.play()
+      }
       this.food.style.display = 'none'
       this.snakeLocation.push([x, y])
       this.snake.unshift(this.createSnakeMetamer())
@@ -231,19 +287,115 @@ class SnakeGame {
     this.food.style.left = `${_foodLoc[0]}px`
     this.food.style.display = 'flex'
   }
+  // working here
+  snakeMoveOnMouseMove(event) {
+    let lastDirection = window.snakeGame.mouseDirection.direction
+    window.snakeGame.mouseDirection.interpret(event)
+    if (lastDirection === window.snakeGame.mouseDirection.direction) {
+      return
+    }
+    switch (window.snakeGame.mouseDirection.direction) {
+      case 'up':
+        window.snakeGame.upEventHandle()
+        break;
+      case 'down':
+        window.snakeGame.downEventHandle()
+        break;
+      case 'left':
+        window.snakeGame.leftEventHandle()
+        break;
+      case 'right':
+        window.snakeGame.rightEventHandle()
+      default:
+        break;
+    }
+  }
+  snakeMoveOnTouchMove(event) {
+    let lastDirection = window.snakeGame.touchDirection.direction
+    window.snakeGame.touchDirection.interpret(event)
+    if (lastDirection === window.snakeGame.touchDirection.direction) {
+      return
+    }
+    switch (window.snakeGame.touchDirection.direction) {
+      case 'up':
+        window.snakeGame.upEventHandle()
+        break;
+      case 'down':
+        window.snakeGame.downEventHandle()
+        break;
+      case 'left':
+        window.snakeGame.leftEventHandle()
+        break;
+      case 'right':
+        window.snakeGame.rightEventHandle()
+      default:
+        break;
+    }
+  }
+  applyModes() {
+    if (this.mouseMode) {
+      console.log('Mouse mode set')
+      window.onmousemove = this.snakeMoveOnMouseMove
+    }
+    else {
+      window.onmousemove = ()=>{}
+    }
+  }
+  pauseGame() {
+    this.saveAutoMover = this.autoMover
+    clearTimeout(this.autoMoverId)
+    this.autoMover = null 
+    pauseScreen.style.display = 'flex'
+    this.bgmSound.pause()
+  }
+
+  resumeGame() {
+    pauseScreen.style.display = 'none'
+    this.applyModes()
+    this.autoMover = this.saveAutoMover
+    this.autoMover()
+    if (this.soundMode) {
+      this.bgmSound.play()
+    }
+  }
+
   gameOver(){
+    if (this.soundMode) {
+      this.gameOverSound.play()
+    }
+    this.bgmSound.pause()
     console.log('Game Over!')
     this.autoMover = null
     score2.innerText = score.innerText
     window.gameOver.style.display = 'flex'
     clearInterval(this.autoMoverId)
+    for (let i in this) {
+      this[i] = null
+    }
+    window.onkeydown = ()=>{}
+    window.onmousemove = ()=>{}
   }
 }
 
 startGame.onclick = (event)=>{
   home.style.display = 'none'
-  let snakeGame = new SnakeGame()
+  window.snakeGame = new SnakeGame()
+  for (let i of document.querySelectorAll('#pauseScreen input')) {
+    i.checked = window.snakeGame[i.id]
+    i.onchange = (event)=>{
+      window.snakeGame[event.target.id] = event.target.checked
+    }
+  }
 }
 document.querySelector('#gameOver button').onclick = (event)=>{
   window.location.href = ''
 }
+
+for (let i of document.querySelectorAll('#pauseScreen label')) {
+  i.onclick = (event)=>{
+    let msg = event.target.title
+    dialog.querySelector('p').innerText = msg 
+    dialog.showModal()
+  }
+}
+

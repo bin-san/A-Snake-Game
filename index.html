@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Snake Game</title>
   <link rel="stylesheet" href="style.css">
-  <script src="SnakeGame.js" defer></script>
+  <script type="module" src="./SnakeGame.js" defer></script>
 </head>
 <body>
   <div id="main"></div>
@@ -38,5 +38,28 @@
     </ul>
     <br>
   </div>
+  <!--Pause Screen-->
+  <div id="pauseScreen">
+    <div class="pauseScreenOption">
+      <input type="checkbox" name="mouseMode" id="mouseMode">
+      <label for="mouseMode" title="Use mouse movement to move the snake.">Mouse Mode 🛈</label>
+    </div>
+    <div class="pauseScreenOption">
+      <input type="checkbox" name="soundMode" id="soundMode">
+      <label for="soundMode" title="Turn off game sounds.">Sound 🛈</label>
+    </div>
+    <div style="height: fit-content;width: 100%;margin-top: 5vmin;">
+      <button onclick="snakeGame.resumeGame()">close</button>
+    </div>
+  </div>
+  <!-- Sounds -->
+  <audio id="snakeEatsFoodSound" src="./sounds/snake-bite-hiss.mp3" style="display: none;"></audio>
+  <audio id="gameOverSound" src="./sounds/snake-game-over.mp3" style="display: none;"></audio>
+  <audio id="bgmSound" src="sounds/snake-bgm.mp3" loop></audio>
+  <!-- Pop Up Viewer-->
+  <dialog id="dialog">
+    <p style="font-family: sans-serif;"></p>
+    <button onclick="dialog.close()">close</button>
+  </dialog>
 </body>
 </html>
