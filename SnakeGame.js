@@ -7,11 +7,11 @@ class SnakeGame {
 
   snakeSize = 2
   dimension = window.innerHeight > window.innerWidth ? window.innerWidth: window.innerHeight
-  gardenWidth = this.dimension
-  gardenHeight = this.dimension
+  gardenWidth = window.innerWidth
+  gardenHeight = window.innerHeight
 
-  deltaMovement = 30
-  snakePixelSize = 30
+  // deltaMovement = 30
+  snakePixelSize = Math.floor(this.dimension / 10)
 
   numOfPixelsInWidth = Math.floor(this.gardenWidth / this.snakePixelSize)
   numOfPixelsInHeight = Math.floor(this.gardenHeight / this.snakePixelSize)
@@ -33,10 +33,10 @@ class SnakeGame {
   soundMode = true
 
   // mouse handle
-  mouseDirection = new MouseDirection()
+  mouseDirection = new MouseDirection(Math.floor(this.dimension / 100))
 
   // touch handle
-  touchDirection = new TouchDirection()
+  touchDirection = new TouchDirection(Math.floor(this.dimension / 100))
 
   constructor() {
     main.style.width = `${this.numOfPixelsInWidth * this.snakePixelSize}px`
@@ -97,6 +97,8 @@ class SnakeGame {
     this.food.style.position = 'absolute'
     this.food.style.display = 'none'
     this.food.classList.add('foodContainer')
+    this.food.style.width = `${this.snakePixelSize}px`
+    this.food.style.height = `${this.snakePixelSize}px`
     let foodChild = document.createElement('div')
     foodChild.classList.add('food')
     this.food.appendChild(foodChild)

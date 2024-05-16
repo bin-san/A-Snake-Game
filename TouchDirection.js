@@ -1,6 +1,10 @@
 class TouchDirection {
   lastPos = []
   direction = ''
+  unitSize // 1vmin
+  constructor(unitSize){
+    this.unitSize = unitSize
+  }
   mod(x){
     if (x < 0) {
       return x * -1
@@ -19,7 +23,7 @@ class TouchDirection {
       let modDx = this.mod(dx)
       let modDy = this.mod(dy)
       if (modDx > modDy) {
-        if (modDx > 10) {
+        if (modDx > this.unitSize) {
           this.lastPos[0] = pos[0]
           this.lastPos[1] = pos[1]
           if (dx > 0) {
@@ -31,7 +35,7 @@ class TouchDirection {
         }
       }
       else {
-        if (modDy > 10) {
+        if (modDy > this.unitSize) {
           this.lastPos[0] = pos[0]
           this.lastPos[1] = pos[1]
           if (dy > 0) {

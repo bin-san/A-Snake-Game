@@ -23,24 +23,22 @@ body {
 }
 
 .foodContainer {
-  width: 30px;
-  height: 30px;
   justify-content: center;
   align-items: center;
 }
 
 @keyframes foodAnimation {
   from {
-    width: 15px;
-    height: 15px;
+    width: 4vmin;
+    height: 4vmin;
   }
   50% {
-    width: 20px;
-    height: 20px;
+    width: 5vmin;
+    height: 5vmin;
   }
   to {
-    width: 15px;
-    height: 15px;
+    width: 4vmin;
+    height: 4vmin;
   }
 }
 
